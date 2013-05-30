@@ -34,6 +34,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 				mouseWheelPixels:"auto", /*mousewheel pixels amount: integer, "auto"*/
 				autoDraggerLength:true, /*auto-adjust scrollbar dragger length: boolean*/
 				autoHideScrollbar:false, /*auto-hide scrollbar when idle*/
+				snapAmount:null, /* optional element always snaps to a multiple of this number in pixels */
+				snapOffset:0, /* when snapping, snap with this number in pixels as an offset */
 				scrollButtons:{ /*scroll buttons*/
 					enable:false, /*scroll buttons support: boolean*/
 					scrollType:"continuous", /*scroll buttons scrolling type: "continuous", "pixels"*/
@@ -88,7 +90,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 				if($.support.touch){
 					mCSB_container.addClass("mCS_touch");
 				}
-				mCSB_container.after("<div class='mCSB_scrollTools' style='position:absolute;'><div class='mCSB_draggerContainer'><div class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' style='position:relative;'></div></div><div class='mCSB_draggerRail'></div></div></div>");
+				mCSB_container.after("<div class='mCSB_scrollTools' style='position:absolute;'><div class='mCSB_draggerContainer'><div class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' style='position:relative;'></div></div></div></div>");
 				var mCSB_scrollTools=mCustomScrollBox.children(".mCSB_scrollTools"),
 					mCSB_draggerContainer=mCSB_scrollTools.children(".mCSB_draggerContainer"),
 					mCSB_dragger=mCSB_draggerContainer.children(".mCSB_dragger");
@@ -124,6 +126,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 					"mouseWheelPixels":options.mouseWheelPixels,
 					"autoDraggerLength":options.autoDraggerLength,
 					"autoHideScrollbar":options.autoHideScrollbar,
+					"snapAmount":options.snapAmount,
+					"snapOffset":options.snapOffset,
 					"scrollButtons_enable":options.scrollButtons.enable,
 					"scrollButtons_scrollType":options.scrollButtons.scrollType,
 					"scrollButtons_scrollSpeed":options.scrollButtons.scrollSpeed,
@@ -416,7 +420,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 					if($this.data("horizontalScroll")){
 						scrollToPos=(e.pageX-mCSB_draggerContainer.offset().left)*$this.data("scrollAmount");
 					}
-					if(target.hasClass("mCSB_draggerContainer") || target.hasClass("mCSB_draggerRail")){
+					if(target.hasClass("mCSB_draggerContainer")){
 						$this.mCustomScrollbar("scrollTo",scrollToPos,{trigger:"internal",scrollEasing:"draggerRailEase"});
 					}
 				});
@@ -674,6 +678,10 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 							scrollTo=mCustomScrollBox.width()-mCSB_container.outerWidth(); clearInterval($this.data("mCSB_buttonScrollRight"));
 							if(!totalScrollOffset){totalScroll=true;}
 						}else{scrollTo=-scrollTo;}
+						var snapAmount = $this.data("snapAmount");
+						if (snapAmount) {
+							scrollTo = Math.round(scrollTo / snapAmount) * snapAmount - $this.data("snapOffset");
+						}
 						/*scrolling animation*/
 						functions.mTweenAxis.call(this,mCSB_dragger[0],"left",Math.round(draggerScrollTo),draggerSpeed,options.scrollEasing);
 						functions.mTweenAxis.call(this,mCSB_container[0],"left",Math.round(scrollTo),contentSpeed,options.scrollEasing,{
@@ -709,6 +717,10 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 							scrollTo=mCustomScrollBox.height()-mCSB_container.outerHeight(); clearInterval($this.data("mCSB_buttonScrollDown"));
 							if(!totalScrollOffset){totalScroll=true;}
 						}else{scrollTo=-scrollTo;}
+						var snapAmount = $this.data("snapAmount");
+						if (snapAmount) {
+							scrollTo = Math.round(scrollTo / snapAmount) * snapAmount - $this.data("snapOffset");
+						}
 						/*scrolling animation*/
 						functions.mTweenAxis.call(this,mCSB_dragger[0],"top",Math.round(draggerScrollTo),draggerSpeed,options.scrollEasing);
 						functions.mTweenAxis.call(this,mCSB_container[0],"top",Math.round(scrollTo),contentSpeed,options.scrollEasing,{
