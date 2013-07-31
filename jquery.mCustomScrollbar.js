@@ -931,8 +931,9 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 	$.support.touch=!!('ontouchstart' in window); /*touch*/
 	$.support.msPointer=window.navigator.msPointerEnabled; /*MSPointer support*/
 	/*plugin dependencies*/
-	var _dlp=("https:"==document.location.protocol) ? "https:" : "http:";
-	$.event.special.mousewheel || document.write('<script src="'+_dlp+'//cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.0.6/jquery.mousewheel.min.js"><\/script>');
+	if ($.event.special.mousewheel === undefined) {
+		throw new Error(' You need to connect the mousewheel plugin (version >=3.0.6)');
+	}
 	/*plugin fn*/
 	$.fn.mCustomScrollbar=function(method){
 		if(methods[method]){
