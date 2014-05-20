@@ -90,7 +90,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 				if($.support.touch){
 					mCSB_container.addClass("mCS_touch");
 				}
-				mCSB_container.after("<div class='mCSB_scrollTools' style='position:absolute;'><div class='mCSB_draggerContainer'><div class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' style='position:relative;'></div></div></div></div>");
+				mCSB_container.after("<div class='mCSB_scrollTools' style='position:absolute;'><div class='mCSB_draggerContainer'><div class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' style='position:relative;'></div></div><div class='mCSB_draggerRail'></div></div></div>");
 				var mCSB_scrollTools=mCustomScrollBox.children(".mCSB_scrollTools"),
 					mCSB_draggerContainer=mCSB_scrollTools.children(".mCSB_draggerContainer"),
 					mCSB_dragger=mCSB_draggerContainer.children(".mCSB_dragger");
@@ -420,7 +420,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 					if($this.data("horizontalScroll")){
 						scrollToPos=(e.pageX-mCSB_draggerContainer.offset().left)*$this.data("scrollAmount");
 					}
-					if(target.hasClass("mCSB_draggerContainer")){
+					if(target.hasClass("mCSB_draggerContainer") || target.hasClass("mCSB_draggerRail")){
 						$this.mCustomScrollbar("scrollTo",scrollToPos,{trigger:"internal",scrollEasing:"draggerRailEase"});
 					}
 				});
